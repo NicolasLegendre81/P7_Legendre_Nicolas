@@ -5,9 +5,9 @@ const db = mysql.createConnection({
     host: process.env.DB_HOST,
     user: process.env.DB_USER, 
     database: 'groupomaniacs',
-    password: process.env.DB_PASSWORD
-  });
-  db.execute(function(err) {
+    password:process.env.DB_PASSWORD
+});
+  db.connect(function(err) {
     if (err) {
       console.error('La connection à la base de donnée a echoué');
       return;
