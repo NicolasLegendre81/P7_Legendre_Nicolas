@@ -1,25 +1,7 @@
 const express = require ('express');
+const db = require ('./config/db')
 const bodyparser = require('body-parser');
-
-//const userRoute = require ('./routes/user');
-// const postRoute = require('./routes/posts');
-const mysql = require ('mysql2');
-require('dotenv').config();
-//connect to the database
-const connection = mysql.createConnection({
-    host: process.env.DB_HOST,
-    user: process.env.DB_USER, 
-    database: 'groupomaniacs',
-    password: process.env.DB_PASSWORD
-  });
-  db.execute(function(err) {
-    if (err) {
-      console.error('La connection à la base de donnée a echoué');
-      return;
-    }
-   
-    console.log('La connection a été établie avec succés ');
-  });
+const userRoute = require ('./routes/user');
   
 const app = express();
 //middleware Cors
@@ -29,8 +11,9 @@ app.use((req, res, next) => {
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, PATCH, OPTIONS');
     next();
   });
+  app.use (bodyparser.json());
 
 
-//app.use ('/api/auth',userRoute);
+app.use ('/api/auth',userRoute);
 //app.use ('/api/posts',postRoute);
 module.exports = app;
