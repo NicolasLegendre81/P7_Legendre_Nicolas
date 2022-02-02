@@ -4,6 +4,7 @@
 // const multer = require("../middleware/multer");
 
 // router.get("/",auth,postCtrl.getAll);
+//router.get("/share/:id",auth,postCtrl.sharedPost);
 // router.post("/",auth,multer,postCtrl.createPost);
 // router.put("/:id",auth,multer,postCtrl.modifyPost);
 // router.delete("/:id",auth,multer,postCtrl.deletePost);
