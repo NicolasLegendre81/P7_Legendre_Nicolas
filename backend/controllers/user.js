@@ -17,7 +17,7 @@ exports.signup = (req, res, next) => {
         bcrypt.hash(req.body.password, 10)
         .then(hash => {
             //Ajout à la BDD
-            db.query(`INSERT INTO users VALUES (NULL,'${req.body.nom}','${req.body.prenom}', '${email}', '${hash}', '${req.body.position_in_company}','0','NULL')`,
+            db.query(`INSERT INTO users VALUES (NULL,'${req.body.nom}','${req.body.prenom}', '${email}', '${hash}', '${req.body.position_in_company}','0',imageUrl)`,
                 (err, results, fields) => {
                     if (err) {
                         console.log(err);
@@ -74,7 +74,6 @@ exports.getUserProfile = (req,res,next) => {
         }if(result){
             return res.status(200).json(result)
         }
-
     }
     )};
 
@@ -87,7 +86,7 @@ exports.deleteUserProfile = (req,res,next) => {
         
     }
     )};
-    exports.modifyProfile = (req,res,next) => {
+exports.modifyProfile = (req,res,next) => {
         if (req.body.nom !=''){
             db.query(`UPDATE users SET nom=? WHERE user_id=${req.body.user_id}`,[req.body.nom],(err,res) =>{
                 if (err) throw err;
@@ -103,22 +102,50 @@ exports.deleteUserProfile = (req,res,next) => {
                 if (err) throw err;
             });
         }
-        return res.status(200).json({messsage:'le profil à été modifié'})
-        // if (req.body.password !=''){
-        //     bcrypt.hash(req.body.password, 10)
-        //     .then(hash =>{
-        //         db.query(`UDATE users SET password=? WHERE user_id=${req.body.user_id}`,[hash],
-        //         (err,res,field)=>{
-        //             if(err){
-        //                 return res.status(400).json({err});
+        return res.status(200).json({messsage:'le profil a été modifié'})   
+    };
+exports.modifyPassword = (req,res,next) =>{
+     if (req.body.password !=''){
+            bcrypt.hash(req.body.password, 10)
+            .then(hash =>{
+                db.query(`UPDATE users SET password=? WHERE user_id=${req.body.user_id}`,[hash],
+                (err,res)=>{
+                    if(err) throw err;
+            })   
+        });
+        }
+        return res.status(201).json({message:"Le mot de passe a été modifié"});
+    };
 
-        //         }
-        //         return res.status(201).json({message:"Le mot de passe a été modifié"});
-            
+ exports.profilePic = (req, res, next) => {
+    if (req.file) { // Si le changement concerne l'avatar on update directement
+        const imageUrl = `${req.protocol}://${req.get("host")}/images/${req.file.filename}`;
 
-        //     })
-            
-        // });
         
-        // }
+        db.query(`SELECT imageUrl FROM users WHERE user_id = ${req.body.user_id}`,(err, res)=> {
+            if (err) {
+                return res.status(500).json(err.message);
+            }
+
+            const filename = result[0].imageUrl.split("/images/")[1];
+            if (filename !== "profilePic.jpg") {
+                fs.unlink(`images/${filename}`, () => { // On supprime le fichier image en amont
+                    db.query(`UPDATE users SET imageUrl = ${imageUrl} WHERE user_id =${req.body.user_id}`, (err, res) => {
+                        if (err) {
+                            return res.status(500).json(err.message);
+                        };
+                        return res.status(200).json({ message: "Utilisateur modifé !" });
+                    });
+                })
+            } else {
+                db.query(`UPDATE users SET imageUrl =${imageUrl} WHERE user_id =${req.body.user_id}`, (err, res) => {
+                    if (err) {
+                        return res.status(500).json(err.message);
+                    };
+                    return res.status(200).json({ message: "Utilisateur modifé !" });
+                });
+            }
+        });
     }
+     
+ };
