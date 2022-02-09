@@ -1,16 +1,13 @@
-// const router = require ('express').Router();
-// const postCtrl = require ("../controllers/post");
-// const auth = require("../middleware/auth");
-// const multer = require("../middleware/multer");
+const router = require ('express').Router();
+const auth = require("../middleware/auth");
+const postCtrl = require ("../controllers/posts");
+const multer = require("../middleware/multer");
 
-// router.get("/",auth,postCtrl.getAll);
-//router.get("/share/:id",auth,postCtrl.sharedPost);
-// router.post("/",auth,multer,postCtrl.createPost);
-// router.put("/:id",auth,multer,postCtrl.modifyPost);
+router.get("/", auth,postCtrl.getAllPosts);
+router.post("/",auth,multer,postCtrl.createPost);
+router.put("/:id",auth,multer,postCtrl.modifyPost);
 // router.delete("/:id",auth,multer,postCtrl.deletePost);
 
-
-
-// module.exports = router;
+module.exports = router;
 
  
