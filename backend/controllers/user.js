@@ -89,17 +89,18 @@ exports.deleteUserProfile = (req,res,next) => {
     )};
 exports.modifyProfile = (req,res,next) => {
         if (req.body.nom !=''){
-            db.query(`UPDATE users SET nom=? WHERE user_id=${req.body.user_id}`,[req.body.nom],(err,res) =>{
-                if (err) throw err;
+            db.query(`UPDATE users SET nom=? WHERE user_id=${req.body.user_id}`,[req.body.nom],(err,result) =>{
+                if (err) {throw err;}
+                
             });
         }
         if(req.body.prenom !=''){
-            db.query(`UPDATE users SET prenom=? WHERE user_id=${req.body.user_id}`,[req.body.prenom],(err,res) =>{
+            db.query(`UPDATE users SET prenom=? WHERE user_id="${req.body.user_id}"`,[req.body.prenom],(err,result) =>{
                 if (err) throw err;
             });
         }
         if (req.body.email !=''){
-            db.query(`UPDATE users SET email=? WHERE user_id=${req.body.user_id}`,[req.body.email],(err,res) =>{
+            db.query(`UPDATE users SET email=? WHERE user_id="${req.body.user_id}"`,[req.body.email],(err,result) =>{
                 if (err) throw err;
             });
         }
@@ -110,21 +111,21 @@ exports.modifyPassword = (req,res,next) =>{
             bcrypt.hash(req.body.password, 10)
             .then(hash =>{
                 db.query(`UPDATE users SET password=? WHERE user_id=${req.body.user_id}`,[hash],
-                (err,res)=>{
-                    if(err) throw err;
+                (err,result)=>{
+                    if(err){ throw err;}
+                    return res.status(201).json({message:"Le mot de passe a été modifié"})
             })   
         });
         }
-        return res.status(201).json({message:"Le mot de passe a été modifié"});
+        
     };
 
  exports.profilePic = (req, res, next) => {
-     console.log(req.body)
     if (req.file) { // Si le changement concerne l'avatar on update directement
         const imageUrl = `${req.protocol}://${req.get("host")}/images/${req.file.filename}`;
 
         
-        db.query(`SELECT imageUrl FROM users WHERE user_id = ${req.params.id}`,(err, res)=> {
+        db.query(`SELECT imageUrl FROM users WHERE user_id = ${req.params.id}`,(err, result)=> {
             if (err) {
                 return res.status(500).json(err.message);
             }
@@ -132,20 +133,21 @@ exports.modifyPassword = (req,res,next) =>{
             const filename = result[0].imageUrl.split("/images/")[1];
             if (filename !== "profilePic.jpg") {
                 fs.unlink(`images/${filename}`, () => { // On supprime le fichier image en amont
-                    db.query(`UPDATE users SET imageUrl = ${imageUrl} WHERE user_id =${req.params.id}`, (err, res) => {
+                    db.query(`UPDATE users SET imageUrl ="${imageUrl}" WHERE user_id =${req.params.id}`, (err, result) => {
                         if (err) {
-                            return res.status(500).json(err.message);
+                            throw err;
                         };
-                        return res.status(200).json({ message: "Utilisateur modifé !" });
+                        return res.status(200).json({ message: "Utilisateur modifié !" });
                     });
                 });
             } else {
-                db.query(`UPDATE users SET imageUrl =${imageUrl} WHERE user_id =${req.params.id}`, (err, res) => {
+                db.query(`UPDATE users SET imageUrl ="${imageUrl}" WHERE user_id =${req.params.id}`, (err, result) => {
                     if (err) {
-                        return res.status(500).json(err.message);
+                        throw err;
                     };
-                    return res.status(200).json({ message: "Utilisateur modifé !" });
+                    return res.status(200).json({ message: "Utilisateur modifié !" });
                 });
+                
             }
         });
     }
