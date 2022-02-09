@@ -51,6 +51,7 @@ exports.login = (req, res, next) => {
                         console.log(results)
                         res.status(200).json({
                             user_id: results[0].user_id,
+
                             
                             token: jwt.sign({
                                 user_id: results[0].user_id
@@ -59,7 +60,7 @@ exports.login = (req, res, next) => {
 
                     });
                 }
-            })
+            });
         }else{
             res.status(404).json({message:'Votre profil utilisateur est introuvable.'})
 
@@ -118,11 +119,12 @@ exports.modifyPassword = (req,res,next) =>{
     };
 
  exports.profilePic = (req, res, next) => {
+     console.log(req.body)
     if (req.file) { // Si le changement concerne l'avatar on update directement
         const imageUrl = `${req.protocol}://${req.get("host")}/images/${req.file.filename}`;
 
         
-        db.query(`SELECT imageUrl FROM users WHERE user_id = ${req.body.user_id}`,(err, res)=> {
+        db.query(`SELECT imageUrl FROM users WHERE user_id = ${req.params.id}`,(err, res)=> {
             if (err) {
                 return res.status(500).json(err.message);
             }
@@ -130,15 +132,15 @@ exports.modifyPassword = (req,res,next) =>{
             const filename = result[0].imageUrl.split("/images/")[1];
             if (filename !== "profilePic.jpg") {
                 fs.unlink(`images/${filename}`, () => { // On supprime le fichier image en amont
-                    db.query(`UPDATE users SET imageUrl = ${imageUrl} WHERE user_id =${req.body.user_id}`, (err, res) => {
+                    db.query(`UPDATE users SET imageUrl = ${imageUrl} WHERE user_id =${req.params.id}`, (err, res) => {
                         if (err) {
                             return res.status(500).json(err.message);
                         };
                         return res.status(200).json({ message: "Utilisateur modifé !" });
                     });
-                })
+                });
             } else {
-                db.query(`UPDATE users SET imageUrl =${imageUrl} WHERE user_id =${req.body.user_id}`, (err, res) => {
+                db.query(`UPDATE users SET imageUrl =${imageUrl} WHERE user_id =${req.params.id}`, (err, res) => {
                     if (err) {
                         return res.status(500).json(err.message);
                     };
