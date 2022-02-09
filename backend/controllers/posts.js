@@ -56,3 +56,11 @@ exports.modifyPost = (req,res,next) =>{
         })
     }
 };
+
+exports.deletePost = (req,res,next) => {
+    db.query( `SELECT * FROM posts WHERE id_post = ${req.body.id_post}`), (err,result) =>{
+        if (err){throw err;}
+       return res.status(200).json(result);
+    }
+
+};
