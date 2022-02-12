@@ -5,6 +5,7 @@ const db = require ('../config/db');
 
 
 exports.signup = (req, res, next) => {
+ try{
      const email =[req.body.email];
     db.query(`SELECT * FROM users WHERE email='${email}'`,
     (err, results, rows) => {
@@ -34,9 +35,11 @@ exports.signup = (req, res, next) => {
         }));
     }
     });
+}catch(error){console.error(err)}
 };
 
 exports.login = (req, res, next) => {
+    try{
     const email =[req.body.email];
     db.query(`SELECT * FROM users WHERE email='${email}'`,
     (err, results, rows) => { 
@@ -48,7 +51,7 @@ exports.login = (req, res, next) => {
                             message: 'Mot de passe incorrect.'
                         });
                     }else{
-                        console.log(results)
+                        console.log('logged')
                         res.status(200).json({
                             user_id: results[0].user_id,
 
@@ -63,31 +66,37 @@ exports.login = (req, res, next) => {
             });
         }else{
             res.status(404).json({message:'Votre profil utilisateur est introuvable.'})
-
         }
     });
+}catch(error) {console.error(err)}
 };
 
 exports.getUserProfile = (req,res,next) => {
-    db.query(`SELECT * FROM users WHERE user_id=${req.params.id};`,(err,result) =>{
+    try{
+    db.query(`SELECT * FROM users WHERE user_id=${req.params.id}`,(err,result) =>{
         if(err){
             return res.status(400).json({err});
         }if(result){
             return res.status(200).json(result)
         }
-    }
-    )};
+    });
+ }catch(error){console.error(err)}
+    };
 
 exports.deleteUserProfile = (req,res,next) => {
-    db.query(`DELETE FROM users WHERE user_id=${req.body.user_id};`,(err,result,fields) =>{
+ try{
+    db.query(`DELETE FROM users WHERE user_id=${req.body.user_id}`,(err,result) =>{
         if(err){
             return res.status(400).json({err});
         }
         return res.status(200).json(result)
         
-    }
-    )};
+    })
+}catch (error){console.error(err)}
+};
+
 exports.modifyProfile = (req,res,next) => {
+    try{
         if (req.body.nom !=''){
             db.query(`UPDATE users SET nom=? WHERE user_id=${req.body.user_id}`,[req.body.nom],(err,result) =>{
                 if (err) {throw err;}
@@ -104,9 +113,12 @@ exports.modifyProfile = (req,res,next) => {
                 if (err) throw err;
             });
         }
-        return res.status(200).json({messsage:'le profil a été modifié'})   
-    };
+        return res.status(200).json({messsage:'le profil a été modifié'})  
+    }catch(error){console.error(err)}     
+};
+
 exports.modifyPassword = (req,res,next) =>{
+    try{
      if (req.body.password !=''){
             bcrypt.hash(req.body.password, 10)
             .then(hash =>{
@@ -117,11 +129,13 @@ exports.modifyPassword = (req,res,next) =>{
             })   
         });
         }
+    }catch(error){console.error(err)}
         
-    };
+};
 
  exports.profilePic = (req, res, next) => {
-    if (req.file) { // Si le changement concerne l'avatar on update directement
+    try{
+    if (req.file) {
         const imageUrl = `${req.protocol}://${req.get("host")}/images/${req.file.filename}`;
 
         
@@ -132,7 +146,7 @@ exports.modifyPassword = (req,res,next) =>{
 
             const filename = result[0].imageUrl.split("/images/")[1];
             if (filename !== "profilePic.jpg") {
-                fs.unlink(`images/${filename}`, () => { // On supprime le fichier image en amont
+                fs.unlink(`images/${filename}`, () => {
                     db.query(`UPDATE users SET imageUrl ="${imageUrl}" WHERE user_id =${req.params.id}`, (err, result) => {
                         if (err) {
                             throw err;
@@ -151,5 +165,5 @@ exports.modifyPassword = (req,res,next) =>{
             }
         });
     }
-     
- };
+}catch(error){console.error(err)}
+};
