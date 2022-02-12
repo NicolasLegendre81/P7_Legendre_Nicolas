@@ -42,9 +42,6 @@ exports.modifyPost = (req,res,next) =>{
                         if(err){throw err;}
                         return res.status(201).json({message:'Publication modifiée'})
                     })
-
-                    console.log(req.body.post)
-
                 });
             }else{
                 const image = (req.file) ? `${req.protocol}://${req.get('host')}/images/${req.file.filename}` : "";
@@ -80,7 +77,6 @@ exports.deletePost = (req,res,next) => {
             if (err){throw err;}
             return res.status(201).json({message:'La publication a été suppprimée'})
         });
-
        }
     });
     }catch(error){console.error(err)}
