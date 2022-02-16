@@ -4,15 +4,26 @@ const fs = require ('fs');
 
 exports.getAllPosts = (req, res ,next) => {
     try{
-    db.query('SELECT * FROM posts JOIN users WHERE user_id = author_id ORDER BY post_date DESC LIMIT 100',
+    db.query('SELECT users.nom,users.prenom,users.position_in_company,users.imageUrl,posts.id_post,posts.post,posts.post_date,posts.author_id,posts.post_imageUrl FROM users JOIN  posts WHERE author_id = users.user_id ORDER BY post_date DESC LIMIT 100',
     (err,result)=>{
         if (err) {
             console.log(err);
             return res.status(400).json("erreur");
-        }
-        else {res.status(200).json(result)}
+        }else {res.status(200).json(result)}
     });
     }catch(error){console.error(err)}
+};
+exports.getPostsUser = (req,res,next) => {
+    try{
+        db.query(`SELECT * FROM posts JOIN (SELECT user_id,nom,prenom,position_in_company,imageUrl FROM users)AS userposts ON user_id=posts.author_id WHERE user_id =${req.params.id} ORDER BY post_date DESC LIMIT 100`,
+        (err,result)=>{
+            if (err) {
+                console.log(err);
+                return res.status(400).json("erreur");
+            }else {res.status(200).json(result)}
+        });
+        }catch(error){console.error(err)};
+    
 };
 
 exports.createPost = (req,res,next) => {
