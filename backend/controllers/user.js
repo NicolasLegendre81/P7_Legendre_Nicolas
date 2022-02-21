@@ -18,7 +18,8 @@ exports.signup = (req, res, next) => {
         bcrypt.hash(req.body.password, 10)
         .then(hash => {
             //Ajout à la BDD
-            db.query(`INSERT INTO users VALUES (NULL,'${req.body.nom}','${req.body.prenom}', '${email}', '${hash}', '${req.body.position_in_company}','0',imageUrl)`,
+            db.query(`INSERT INTO users VALUES 
+            (NULL,'${req.body.nom}','${req.body.prenom}', '${email}', '${hash}', '${req.body.position_in_company}','0',imageUrl)`,
                 (err, results, fields) => {
                     if (err) {
                         console.log(err);
@@ -98,18 +99,21 @@ exports.deleteUserProfile = (req,res,next) => {
 exports.modifyProfile = (req,res,next) => {
     try{
         if (req.body.nom !=''){
-            db.query(`UPDATE users SET nom=? WHERE user_id=${req.body.user_id}`,[req.body.nom],(err,result) =>{
+            db.query(`UPDATE users 
+            SET nom=? WHERE user_id=${req.body.user_id}`,[req.body.nom],(err,result) =>{
                 if (err) {throw err;}
                 
             });
         }
         if(req.body.prenom !=''){
-            db.query(`UPDATE users SET prenom=? WHERE user_id="${req.body.user_id}"`,[req.body.prenom],(err,result) =>{
+            db.query(`UPDATE users 
+            SET prenom=? WHERE user_id="${req.body.user_id}"`,[req.body.prenom],(err,result) =>{
                 if (err) throw err;
             });
         }
         if (req.body.email !=''){
-            db.query(`UPDATE users SET email=? WHERE user_id="${req.body.user_id}"`,[req.body.email],(err,result) =>{
+            db.query(`UPDATE users 
+            SET email=? WHERE user_id="${req.body.user_id}"`,[req.body.email],(err,result) =>{
                 if (err) throw err;
             });
         }
@@ -122,7 +126,8 @@ exports.modifyPassword = (req,res,next) =>{
      if (req.body.password !=''){
             bcrypt.hash(req.body.password, 10)
             .then(hash =>{
-                db.query(`UPDATE users SET password=? WHERE user_id=${req.body.user_id}`,[hash],
+                db.query(`UPDATE users 
+                SET password=? WHERE user_id=${req.body.user_id}`,[hash],
                 (err,result)=>{
                     if(err){ throw err;}
                     return res.status(201).json({message:"Le mot de passe a été modifié"})
@@ -147,7 +152,8 @@ exports.modifyPassword = (req,res,next) =>{
             const filename = result[0].imageUrl.split("/images/")[1];
             if (filename !== "profilePic.jpg") {
                 fs.unlink(`images/${filename}`, () => {
-                    db.query(`UPDATE users SET imageUrl ="${imageUrl}" WHERE user_id =${req.params.id}`, (err, result) => {
+                    db.query(`UPDATE users 
+                    SET imageUrl ="${imageUrl}" WHERE user_id =${req.params.id}`, (err, result) => {
                         if (err) {
                             throw err;
                         };
@@ -155,7 +161,8 @@ exports.modifyPassword = (req,res,next) =>{
                     });
                 });
             } else {
-                db.query(`UPDATE users SET imageUrl ="${imageUrl}" WHERE user_id =${req.params.id}`, (err, result) => {
+                db.query(`UPDATE users 
+                SET imageUrl ="${imageUrl}" WHERE user_id =${req.params.id}`, (err, result) => {
                     if (err) {
                         throw err;
                     };
