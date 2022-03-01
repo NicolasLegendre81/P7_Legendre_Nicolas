@@ -55,10 +55,12 @@ exports.login = (req, res, next) => {
                         console.log('logged')
                         res.status(200).json({
                             user_id: results[0].user_id,
+                            isAdmin: results[0].Admin,
 
                             
                             token: jwt.sign({
-                                user_id: results[0].user_id
+                                user_id: results[0].user_id,
+                                isAdmin: results[0].Admin,
                             }, process.env.MY_TOKEN,
                              {expiresIn: '24h'})
 
@@ -86,7 +88,7 @@ exports.getUserProfile = (req,res,next) => {
 
 exports.deleteUserProfile = (req,res,next) => {
  try{
-    db.query(`DELETE FROM users WHERE user_id=${req.body.user_id}`,(err,result) =>{
+    db.query(`DELETE FROM users WHERE user_id=${req.params.id}`,(err,result) =>{
         if(err){
             return res.status(400).json({err});
         }
@@ -100,20 +102,20 @@ exports.modifyProfile = (req,res,next) => {
     try{
         if (req.body.nom !=''){
             db.query(`UPDATE users 
-            SET nom=? WHERE user_id=${req.body.user_id}`,[req.body.nom],(err,result) =>{
+            SET nom=? WHERE user_id=${req.params.id}`,[req.body.nom],(err,result) =>{
                 if (err) {throw err;}
                 
             });
         }
         if(req.body.prenom !=''){
             db.query(`UPDATE users 
-            SET prenom=? WHERE user_id="${req.body.user_id}"`,[req.body.prenom],(err,result) =>{
+            SET prenom=? WHERE user_id="${req.params.id}"`,[req.body.prenom],(err,result) =>{
                 if (err) throw err;
             });
         }
         if (req.body.email !=''){
             db.query(`UPDATE users 
-            SET email=? WHERE user_id="${req.body.user_id}"`,[req.body.email],(err,result) =>{
+            SET email=? WHERE user_id="${req.params.id}"`,[req.body.email],(err,result) =>{
                 if (err) throw err;
             });
         }
@@ -127,7 +129,7 @@ exports.modifyPassword = (req,res,next) =>{
             bcrypt.hash(req.body.password, 10)
             .then(hash =>{
                 db.query(`UPDATE users 
-                SET password=? WHERE user_id=${req.body.user_id}`,[hash],
+                SET password=? WHERE user_id=${req.params.id}`,[hash],
                 (err,result)=>{
                     if(err){ throw err;}
                     return res.status(201).json({message:"Le mot de passe a été modifié"})
