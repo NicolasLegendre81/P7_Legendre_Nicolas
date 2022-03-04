@@ -28,8 +28,6 @@ html{
   box-sizing: border-box;
 }
 body{margin: 0;
-background:no-repeat center url("../src/assets/Background.png"),#1D1A1A;
-background-attachment:fixed;
 }
 
 </style>
