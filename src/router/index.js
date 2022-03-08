@@ -1,6 +1,7 @@
 import { createRouter, createWebHashHistory } from 'vue-router'
 /* eslint-disable */
 import HomePage from "../views/HomePage.vue"
+import WallPage from "../views/WallPage.vue"
 
 const routes = [
   {
@@ -8,7 +9,11 @@ const routes = [
     name: 'HomePage',
     component: HomePage,
   },
-  
+  {
+    path:'/post',
+    name:'WallPage',
+    component:WallPage,
+  }
 
 ]
 
