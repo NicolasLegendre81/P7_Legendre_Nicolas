@@ -5,7 +5,7 @@
 
         </div>
         <form class="signup-form" @submit="signup">
-             <p v-if="errors.length">
+            <p v-if="errors.length">
                 <b>Il y a un problème avec les éléments renseignés dans les champs suivants:</b>
                 <ul>
                     <li v-for="error in errors" :key="error">{{ error }}</li>
@@ -45,12 +45,12 @@ export default {
   methods :{
       
       signup(e){
-          
             this.errors=[]
             const emailRe = new RegExp('^[a-zA-Z0-9.-_]+[@]{1}[a-zA-Z0-9.-_]+[.]{1}[a-z]{2,10}$');
             const passwordRe = new RegExp('^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$');
             const nomRE = new RegExp ("^[a-zA-ZÀ-ÿ]+(\\s?\\.?,?'?-?[a-zA-ZÀ-ÿ])+$");
             const posteRe = new RegExp ("^[a-zA-ZÀ-ÿ]+(\\s?\\.?,?'?-?[a-zA-ZÀ-ÿ])+$");
+            const self=this;
 
             if(!this.email || !emailRe.test(this.email)){
             this.errors.push("Email invalide ");
@@ -72,7 +72,6 @@ export default {
 
             if(!this.errors.length)
             {
-
                 
                   axios.post("http://localhost:3000/api/auth/signup",{
                     email:this.email,
@@ -82,8 +81,13 @@ export default {
                     position_in_company:this.poste
 
                 })
+                
                 .then(function(response){
                     console.log(response)
+                     self.$router.push('/post');
+                })
+                .catch(error =>{
+                    this.errors.push(error.response.data.message)
                 })
                 
             }else{ 
@@ -91,25 +95,7 @@ export default {
                         e.preventDefault();
                          
                         }
-        
         },
-        // postSignup(){
-            
-        //     if(this.signup){
-        //         console.log('hi')
-        //         // axios.post("http://localhost:3000/api/auth/signup",{
-        //         //     email:this.email,
-        //         //     password:this.password,
-        //         //     nom:this.nom,
-        //         //     prenom:this.prenom,
-        //         //     position_in_company:this.poste
-
-        //         // })
-        //         // .then(function(response){
-        //         //     console.log(response)
-        //         // })
-        //     }
-        // }
     }
 }
 </script>
@@ -155,6 +141,11 @@ export default {
     transform: scale(1.1);
     transition:0.3s;
     filter:brightness(1.2) drop-shadow(0px 0px grey);
+}
+.submit-button:active{
+    transform: scale(1.8);
+    transition:0.3s;
+    filter:brightness(3) drop-shadow(0px 0px rgb(15, 15, 15));
 }
 li{
     color:red;

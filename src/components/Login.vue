@@ -4,7 +4,7 @@
             Connectez-vous
 
         </div>
-        <form class="login-form" @submit.prevent="login()">
+        <form class="login-form" @submit="login">
              <p v-if="errors.length">
                 <b>Il y a un problème avec les éléments renseignés dans les champs suivants:</b>
                 <ul>
@@ -23,14 +23,57 @@
 </template>
 
 <script scoped>
+import axios from'axios';
 export default {
      name: "LoGin",
-  data(){return{
+        data(){return{
       errors:[],
       email:'',
       password:""
-  }}
-    
+  }},
+ methods: {
+     
+     login(e){
+         this.errors=[]
+            const emailRe = new RegExp('^[a-zA-Z0-9.-_]+[@]{1}[a-zA-Z0-9.-_]+[.]{1}[a-z]{2,10}$');
+            const passwordRe = new RegExp('^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$');
+            const self = this;
+              if(!this.email || !emailRe.test(this.email)){
+            this.errors.push("Email invalide ");
+            }
+            if(!this.password || !passwordRe.test(this.password)){
+                this.errors.push("Votre Mot de passe doit comporter au Moins 8 caractéres dont : 1 chiffre entre 0 et 9, 1 lettre majuscule et une lettre minuscule.")
+
+            }
+             if(!this.errors.length)
+            {
+
+                
+                  axios.post("http://localhost:3000/api/auth/login",{
+                    email:this.email,
+                    password:this.password,
+                })
+                .then(function(response){
+                    console.log(response)
+                    localStorage.setItem('token',response.data.token);
+                    localStorage.setItem("isAdmin",response.data.isAdmin);
+                    localStorage.setItem('userId',response.data.user_id);
+                    self.$router.push('/post');
+
+                })
+                .catch(error =>{
+                    this.errors.push(error.response.data.message)
+                })
+                
+            }else{ 
+                        
+                        e.preventDefault();
+                         
+                        }
+
+     }
+     
+ },   
 }
 </script>
 
