@@ -1,9 +1,11 @@
 <template>
-  <div class="header">
-    <div class="header_container_logo">
-    <img id="logo" src="../assets\icon-left-font-monochrome-white.png" alt="Groupomania logo">
-    </div>
-  </div>
+  <section id="header" class="container-fluid">
+      <div class="col-4 container-logo">
+        <img src="../assets/icon-left-font-monochrome-white.png" alt="logo">
+
+      </div>
+  </section>
+
 </template>
 
 <script scoped>
@@ -15,33 +17,22 @@ export default {
 }
 </script>
 <style scoped>
-    .header{
-        display: grid;
-        grid-template-columns:1fr 1fr 1fr;
+    #header{
+       display: flex;
+       justify-content: center;
         align-items: center;
         width:100%;
         height: 68px;
         position: relative;
-        background:#23767C;
+        background:#dc3545;
     }
-    .header_container_logo{
+    .container-logo{
       display:flex;
       justify-content: center;
-      grid-column: 2/3;
-      overflow: hidden;
-      margin: auto;
-      
-      
-      
-      
-    }
-    #logo{
-        
+      }
+    #logo{   
         width:100%;
-        height:100%;
-        
-        
-        
+        height:100%;    
     }
 </style>
 

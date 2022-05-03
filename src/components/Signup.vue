@@ -1,5 +1,61 @@
 <template>
-    <div class="signup-container">
+<section id="inscription" class="container-sm mt-5">
+        <div class="card text-center signup-card">
+            <div class="card-header bs-danger">
+                <ul class="nav nav-tabs card-header-tabs">
+                    <li class="nav-item">
+                        <a class="nav-link text-white bg-dark" ><router-link to="/login">Connection </router-link></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-white active bg-danger" aria-current="true">Inscription</a>
+                    </li>
+                </ul>
+            </div>
+            <form class="col g-2 mt-3 mb-3" @submit="signup">
+                <p v-if="errors.length">
+                    <b>Il y a un problème avec les éléments renseignés dans les champs suivants:</b>
+                    <ul>
+                        <li  v-for="error in errors" :key="error">{{ error }}</li>
+                    </ul>
+                </p>
+                
+                 <div class="col-lg-5 mx-auto mb-3">
+                    <label  for="email" class="col-form-label" required>Email</label>
+                    <input  v-model="email" type="text" class="form-control" id="Email" placeholder="robert-dupont@gmail.com">
+
+                </div>
+                <div class="col-lg-5 mx-auto mb-3 row">
+                    <label for="password" class="col-form-label" required >Mot de passe</label>
+                    <input v-model="password" type="password" class="form-control" id="password" placeholder="Mot de passe">
+
+                </div>
+                <div class="name-form">
+                    <div class="form-group col-md-4 mb-3 ">
+                        <label for="nom" class="col-form-label" required>Nom</label>
+                        <input  v-model="nom" type="text" class="form-control" id="Nom" placeholder="Ex:Dupont">
+
+                    </div>
+                    <div class="form-group col-md-4 mb-3 ">
+                        <label for="prenom" class="col-form-label" required>Prénom</label>
+                        <input  v-model="prenom" type="text" class="form-control" id="prenom" placeholder="Ex:Robert">
+
+                    </div>
+                </div>
+                <div class="col-lg-5 mx-auto mb-3 row">
+                    <label for="poste" class="col-form-label" required >Fonction dans la société</label>
+                    <input v-model="poste" type="text" class="form-control" id="poste" placeholder="Ex:Technicien informatique">
+
+                </div>
+               <div id="submit-btn" class="col-auto">
+                   <button id="btn" type="submit" class="btn btn-secondary bg-danger">Inscrivez-vous</button>
+               </div>
+
+            </form>
+
+        </div>
+
+    </section>
+    <!-- <div class="signup-container">
         <div class="sign-up-title">
             Créez votre compte
 
@@ -11,21 +67,21 @@
                     <li v-for="error in errors" :key="error">{{ error }}</li>
                  </ul>
             </p>
-            <p><label for="email" required>Email: </label>
-            <input v-model="email" placeholder="ex:nom.prenom@gmail.com" /></p>
-            <p><label for="password" required>Mot de passe: </label>
-            <input v-model="password" placeholder="Saisissez ici votre mot de passe" /></p>
-            <p><label for="nom" required >Nom: </label>
-            <input v-model="nom" placeholder="ex:Dupont" /></p>
-            <p><label for="prenom" required>Prénom: </label>
-            <input v-model="prenom" placeholder="ex:Jean" /></p>
-            <p><label for="poste" required>Fonction dans la société: </label>
-            <input v-model="poste" placeholder="ex:Technicien" /></p>
-            <p><input label for ="S'inscrire" class="submit-button" type="submit" value="S'incrire"></p>
+            <h2><label for="email" required>Email: </label>
+            <input v-model="email" placeholder="ex:nom.prenom@gmail.com" /></h2>
+            <h2><label for="password" required>Mot de passe: </label>
+            <input v-model="password" type="password" placeholder="Saisissez ici votre mot de passe" /></h2>
+            <h2><label for="nom" required >Nom: </label>
+            <input v-model="nom" placeholder="ex:Dupont" /></h2>
+            <h2><label for="prenom" required>Prénom: </label>
+            <input v-model="prenom" placeholder="ex:Jean" /></h2>
+            <h2><label for="poste" required>Fonction dans la société: </label>
+            <input v-model="poste" placeholder="ex:Technicien" /></h2>
+            <h2><input label for ="S'inscrire" class="submit-button" type="submit" value="S'incrire"></h2>
             
         </form>
 
-    </div>
+    </div> -->
     
 </template>
 <script scoped>
@@ -45,15 +101,18 @@ export default {
   methods :{
       
       signup(e){
-            this.errors=[]
+            this.errors=[];
+            this.validate=false;
             const emailRe = new RegExp('^[a-zA-Z0-9.-_]+[@]{1}[a-zA-Z0-9.-_]+[.]{1}[a-z]{2,10}$');
             const passwordRe = new RegExp('^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$');
             const nomRE = new RegExp ("^[a-zA-ZÀ-ÿ]+(\\s?\\.?,?'?-?[a-zA-ZÀ-ÿ])+$");
             const posteRe = new RegExp ("^[a-zA-ZÀ-ÿ]+(\\s?\\.?,?'?-?[a-zA-ZÀ-ÿ])+$");
-            const self=this;
+            const self = this;
 
             if(!this.email || !emailRe.test(this.email)){
+            
             this.errors.push("Email invalide ");
+            
             }
             if(!this.password || !passwordRe.test(this.password)){
                 this.errors.push("Votre Mot de passe doit comporter au Moins 8 caractéres dont : 1 chiffre entre 0 et 9, 1 lettre majuscule et une lettre minuscule.")
@@ -78,16 +137,32 @@ export default {
                     password:this.password,
                     nom:this.nom,
                     prenom:this.prenom,
-                    position_in_company:this.poste
-
+                    position_in_company:this.poste,
+                    
                 })
-                
                 .then(function(response){
-                    console.log(response)
-                     self.$router.push('/post');
+                   let successMsg=document.createElement("p");
+                   successMsg.style.color=("green");
+                   successMsg.classList =("alert alert-success mt-1")
+                   successMsg.role=("alert")
+                   successMsg.innerHTML=response.data.message ;
+                   document.querySelector("#submit-btn").appendChild(successMsg)
+                   let login = document.createElement("a")
+                   login.classList =("login-link")
+                   login.href=("http://localhost:8080/?#/login")
+                   login.innerHTML=("Connectez-vous")
+                   successMsg.appendChild(login)
+                   
+                  
+                   
+
+
+                    //  self.$router.push('/login');
                 })
-                .catch(error =>{
-                    this.errors.push(error.response.data.message)
+                 .catch(function(error) {
+                console.log(error.response.data);
+                self.errors.push(error.response.data.message);
+
                 })
                 
             }else{ 
@@ -102,53 +177,29 @@ export default {
 <style scoped>
 
 
-.signup-container{
-    grid-column: 4/5;
-    grid-row:2/4;
-    background: rgba(180, 174, 174, 0.938); 
+.signup-card {
     border-radius: 1em;
+    background-color: #9f8a8a15;
     box-shadow: 0 0 1em rgb(145, 142, 142);
     border:solid 1px #323b3f;
+    transition: all 0.3s ease-in
 }
-.sign-up-title{
-    color:white;
-    background:#23767C;
-    border-radius: 1em 1em 0 0;
-    border:solid 1px rgb(61, 59, 59);
-}
-.signup-form{
-    display: flex;
-    flex-direction: column;   
-}
-.signup-form p{
-    display:flex;
+.signup-card:hover{
+    filter: brightness(105%);
+    transform: scale(105%);
+    box-shadow: 0 0 1em rgba(213, 48, 48, 0.588);
     
-    flex-direction: column;
-    text-align: start;
-    margin:1em;
 }
-.submit-button{
-    width:80%;
-    height:2.5em;
-    color:white;
-    background: #23767C;
-    border: solid 1px black;
-    margin: auto;
-    box-shadow:0 0 1em #323b3f;
-    border-radius:1em;
-}
-.submit-button:hover{
-    transform: scale(1.1);
-    transition:0.3s;
-    filter:brightness(1.2) drop-shadow(0px 0px grey);
-}
-.submit-button:active{
-    transform: scale(1.8);
-    transition:0.3s;
-    filter:brightness(3) drop-shadow(0px 0px rgb(15, 15, 15));
+.name-form{
+    display:flex;
+    flex-direction: row;
+    justify-content:space-evenly;
+    
 }
 li{
     color:red;
+    list-style: none;
 
 }
+
 </style>
