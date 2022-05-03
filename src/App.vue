@@ -1,6 +1,8 @@
 <template>
-    <HeaderVue/>
-  <router-view/> 
+  <div class="container-fluid">
+      <HeaderVue/>
+    <router-view/> 
+  </div>
 </template>
 <script>
 import HeaderVue from "@/components/Header.vue"
@@ -31,5 +33,12 @@ html{
 }
 body{margin: 0;
 }
-
+.container-fluid{
+  padding-right: 0;
+  padding-left:0;
+}
+a{
+  text-decoration: none;
+  color:black;
+}
 </style>
