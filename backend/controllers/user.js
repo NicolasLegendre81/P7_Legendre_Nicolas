@@ -54,8 +54,13 @@ exports.login = (req, res, next) => {
                     }else{
                         console.log('logged')
                         res.status(200).json({
-                            user_id: results[0].user_id,
-                            isAdmin: results[0].Admin,
+                            // user_id: results[0].user_id,
+                            // isAdmin: results[0].Admin,
+                            // profilePic: results[0].imageUrl,
+                            // nom: results[0].nom,
+                            // prenom: results[0].prenom,
+                            user:   results[0],
+
 
                             
                             token: jwt.sign({
