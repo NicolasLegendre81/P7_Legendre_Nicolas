@@ -2,7 +2,7 @@ const router = require ('express').Router();
 const auth = require("../middleware/auth");
 const isAdmin = require("../middleware/isAdmin");
 const authpost = require ("../middleware/authpost");
-const authUser = require ("..middleware/authUser");
+const authUser = require ("../middleware/authUser");
 const postCtrl = require ("../controllers/posts");
 const multer = require("../middleware/multer");
 
