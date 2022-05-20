@@ -1,3 +1,4 @@
+/* eslint-disable vue/multi-word-component-names */
 <template>
 <section id="connection" class="container-sm mt-5">
         <div class="card text-center connection-card">
@@ -44,6 +45,7 @@
 <script scoped>
 import axios from'axios';
 export default {
+     // eslint-disable-next-line vue/multi-word-component-names
      name: "LoGin",
         data(){return{
       errors:[],

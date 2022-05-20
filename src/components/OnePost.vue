@@ -27,6 +27,18 @@
         <div class="col-12 pt-2 pe-3 text-end modify-date">
                             <span class="date text-muted"> Publié le  {{ date }} </span>
         </div>
+        <div class="post-footer accordion row" id="showcomments">
+            <div class="accordion-item">
+                <h4 class="accordion-header" id="heading-comments">
+                    <button class="accordion-button  btn-transparent shadow-none collapsed p-1 m-1" @click="getComs(postId)"    type="button" data-bs-toggle="collapse" :data-bs-target="`#collapse-comments`+postId" aria-expanded="false" aria-controls="collapse-comments">
+                        Commentaires
+                    </button>
+                </h4>
+                <div :id="`collapse-comments`+postId" class="accordion-collapse collapse" aria-labelledby="heading-comments" data-bs-parent="#showcomments">
+                    <CommentCard :comments="comments"/>
+                </div>
+            </div>
+        </div>
     </div>
     <div :id="`editPost`+(postId)" class="modal" tabindex="-1">
                             <div class="modal-dialog">
@@ -35,7 +47,7 @@
                                     <h5 class="modal-title">Modifier la publication</h5>
                                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                 </div>
-                                <form class="modal-body text-left col-sm-12" @submit.prevent="uploadPost()" enctype="multipart/form-data" >
+                                <form class="modal-body text-left col-sm-12" @submit="uploadPost(postId)" enctype="multipart/form-data" >
                                     <div class="col-12">
                                         <label for="editedContent">Modifiez votre publication:</label>
                                         <textarea v-model="editedContent" class="col-12 m-1" ></textarea>
@@ -44,7 +56,7 @@
                                         <img  class="img-fluid" id="editedImg" :src="postImg">
                                         <input class="btn-primary"  @change="uploadEditedImg"   id="uploadImg" aria-label="Ajoutez une photo " type="file" >
                                     </div>
-                                    <button type="submit" @click="uploadPost(postId)" class="btn btn-primary">Valider</button>
+                                    <button type="submit" class="btn btn-primary">Valider</button>
                                 </form>
                                 
                                 </div>
@@ -52,7 +64,8 @@
     </div>
 </template>
 <script>
-import axios from 'axios'
+import axios from 'axios';
+import CommentCard from '../components/CommentCard.vue';
 export default {
     props:["authorImg","nom","prenom","editionDropdown","job","postId","postContent","postImg","date"],
     data: function(){
@@ -60,9 +73,17 @@ export default {
            userId: localStorage.getItem('userId'),
            editedContent:[this.postContent],
            files:[],
+           comments:[],
             showEdit:false,    
        }
    },
+
+   components:{
+       CommentCard,
+
+
+   },
+
     methods:{
         deletePost:function(postId){
            const token = localStorage.getItem('token');
@@ -81,10 +102,10 @@ export default {
            this.files= e.target.files[0];
 
        },
-        uploadPost:function(postId,e){
-            // const token = localStorage.getItem('token');
+        uploadPost:function(postId){
+            const token = localStorage.getItem('token');
            const formData = new FormData();
-            for (const i of Object.keys(this.files,)) {
+            for (const i of Object.keys(this.files)) {
              formData.append('files', this.files[i])
              }
             if(this.editedContent !=''){
@@ -95,30 +116,40 @@ export default {
              formData.append("image",this.files)
             }
             if(this.files||this.editedContent){
-                formData.append("user_id",this.userId)
-                // axios.put(`http://localhost:3000/api/posts/${postId}`,formData,{
-        
-                //     headers: {
-                //             "Content-Type": "multipart/form-data",
-                //     Authorization: `Bearer ${token}`,
-                //     },
-
-                //  })
-                console.log(formData)
+                axios.put(`http://localhost:3000/api/posts/${postId}`,formData,{
+                    headers: {
+                            "Content-Type": "multipart/form-data",
+                    Authorization: `Bearer ${token}`,
+                    },
+                 })
                 .then(function(response){
                 console.log(response)
                     location.reload();
                 } )
                 .catch(error=>{console.log(error)});
+            }
+        }, 
+        getComs:function(postId) {const token=localStorage.getItem('token');
+           axios.get(`http://localhost:3000/api/comments/${postId}`,{ 
+               headers:{ 
+                    Authorization: `Bearer ${token}` 
+               }
+           })
+           .then( response=>{
+           this.comments=response.data[0];
+           
 
 
-            }
-            else{
-                e.preventDefault();
-            }
-            }       
+           })
+           .catch(error=>{
+               console.log (error)
+           })
+       },
+
+            
+        }      
     }
-}
+
 </script>
 <style scoped>
 h3{
@@ -168,6 +199,25 @@ h4{
     max-height: 45rem;
     object-fit: contain;
 }
+.accordion-item::before{
+    width:100%;
+    content: "";
+    background-color: #d0c5c5;
+    height: 1px;
+    box-shadow: 0 0 0.3em #e7dfdf;
+    display: block;
+}
+.accordion-item{
+    border:none;
+}
+.accordion-button{
+    width: 8.5em;
+}
+.accordion-item:last-of-type {
+ border-bottom-right-radius:1.5em;
+ border-bottom-left-radius:1.5em;
+}
+
 </style>
 
 
