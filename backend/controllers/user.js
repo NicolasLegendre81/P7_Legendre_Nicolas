@@ -36,7 +36,7 @@ exports.signup = (req, res, next) => {
         }));
     }
     });
-}catch(error){console.error(err)}
+}catch(error){console.error(error)}
 };
 
 exports.login = (req, res, next) => {
@@ -76,7 +76,7 @@ exports.login = (req, res, next) => {
             res.status(404).json({message:'Votre profil utilisateur est introuvable.'})
         }
     });
-}catch(error) {console.error(err)}
+}catch(error) {console.error(error)}
 };
 
 exports.getUserProfile = (req,res,next) => {
@@ -88,7 +88,7 @@ exports.getUserProfile = (req,res,next) => {
             return res.status(200).json(result)
         }
     });
- }catch(error){console.error(err)}
+ }catch(error){console.error(error)}
     };
 
 exports.deleteUserProfile = (req,res,next) => {
@@ -100,7 +100,7 @@ exports.deleteUserProfile = (req,res,next) => {
         return res.status(200).json(result)
         
     })
-}catch (error){console.error(err)}
+}catch (error){console.error(error)}
 };
 
 exports.modifyProfile = (req,res,next) => {
@@ -125,7 +125,7 @@ exports.modifyProfile = (req,res,next) => {
             });
         }
         return res.status(200).json({messsage:'le profil a été modifié'})  
-    }catch(error){console.error(err)}     
+    }catch(error){console.error(error)}     
 };
 
 exports.modifyPassword = (req,res,next) =>{
@@ -141,7 +141,7 @@ exports.modifyPassword = (req,res,next) =>{
             })   
         });
         }
-    }catch(error){console.error(err)}
+    }catch(error){console.error(error)}
         
 };
 
@@ -179,5 +179,5 @@ exports.modifyPassword = (req,res,next) =>{
             }
         });
     }
-}catch(error){console.error(err)}
+}catch(error){console.error(error)}
 };

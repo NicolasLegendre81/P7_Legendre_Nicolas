@@ -9,7 +9,7 @@ exports.getAllPosts = (req,res,next) =>{
                 db.query(`SELECT nom,prenom,position_in_company,imageUrl,id_post,post,post_date,author_id,post_imageUrl 
                 FROM users JOIN  posts WHERE author_id =user_id ORDER BY post_date DESC`,
                 (err,result)=>{
-                    if (err){return reject(error)}
+                    if (err){return reject(err)}
                     else{return resolve(result);}
                     
                 });
@@ -19,7 +19,7 @@ exports.getAllPosts = (req,res,next) =>{
             return new Promise((resolve,reject) =>{
                 db.query(`SELECT * FROM partage JOIN posts ON posts.id_post=partage.id_post 
                 JOIN users ON users.user_id=partage.user_id ORDER BY share_date DESC`,(err,result)=>{
-                    if (err){return reject(error)}
+                    if (err){return reject(err)}
                     else{return resolve (result);}
                 });
 
@@ -90,7 +90,7 @@ exports.createPost = (req,res,next) => {
             res.status(201).json({message :'Votre poste a été publié'});
         }    
     });
- }catch(error){console.error[err]}
+ }catch(error){console.error[error]}
 };
 
 exports.modifyPost = (req,res,next) =>{
@@ -147,7 +147,7 @@ exports.deletePost = (req,res,next) => {
         });
        }
     });
-    }catch(error){console.error(err)}
+    }catch(error){console.error(error)}
 };
 exports.sharePost = (req,res,next) => {
     try{
@@ -158,7 +158,7 @@ exports.sharePost = (req,res,next) => {
         }
         );
 
-    }catch(error){console.error(err)}
+    }catch(error){console.error(error)}
 
     };
 
