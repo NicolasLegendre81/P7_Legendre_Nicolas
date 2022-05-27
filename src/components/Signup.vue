@@ -55,34 +55,6 @@
         </div>
 
     </section>
-    <!-- <div class="signup-container">
-        <div class="sign-up-title">
-            Créez votre compte
-
-        </div>
-        <form class="signup-form" @submit="signup">
-            <p v-if="errors.length">
-                <b>Il y a un problème avec les éléments renseignés dans les champs suivants:</b>
-                <ul>
-                    <li v-for="error in errors" :key="error">{{ error }}</li>
-                 </ul>
-            </p>
-            <h2><label for="email" required>Email: </label>
-            <input v-model="email" placeholder="ex:nom.prenom@gmail.com" /></h2>
-            <h2><label for="password" required>Mot de passe: </label>
-            <input v-model="password" type="password" placeholder="Saisissez ici votre mot de passe" /></h2>
-            <h2><label for="nom" required >Nom: </label>
-            <input v-model="nom" placeholder="ex:Dupont" /></h2>
-            <h2><label for="prenom" required>Prénom: </label>
-            <input v-model="prenom" placeholder="ex:Jean" /></h2>
-            <h2><label for="poste" required>Fonction dans la société: </label>
-            <input v-model="poste" placeholder="ex:Technicien" /></h2>
-            <h2><input label for ="S'inscrire" class="submit-button" type="submit" value="S'incrire"></h2>
-            
-        </form>
-
-    </div> -->
-    
 </template>
 <script scoped>
 import axios from'axios';

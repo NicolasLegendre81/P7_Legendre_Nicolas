@@ -58,40 +58,7 @@ export default ({
            .catch(error=>{
                console.log (error)
            })
-       },
-    //    deletePost:function(id_post){
-    //        const token = localStorage.getItem('token');
-    //            axios.delete(`http://localhost:3000/api/posts/${id_post}`,{
-    //                headers:{
-    //                Authorization: `Bearer ${token}`
-    //            }
-    //        })
-    //        .then(function(response){
-    //             console.log(response.data.message)
-    //             location.reload();
-    //         } )
-    //     .   catch(error=>{console.log(error)});
-    //    },
-    //    uploadPost:function(id_post){
-    //        const token = localStorage.getItem('token');
-    //        const user_id=localStorage.getItem("userId");
-    //        const formData = new FormData();
-    //         for (const i of Object.keys(this.files)) {
-    //          formData.append('files', this.files[i])
-    //          }
-    //         if(this.postContent!=''){
-    //          formData.append("post",this.postContent)
-    //         }
-    //          formData.append("user_id",user_id);
-    //         if(this.files){
-    //          formData.append("image",this.files)
-    //         }
-    //         if(this.files||this.postContent)
-
-    //        axios.
-
-    //    }
-       
+       },     
        datePost: function(date) {
             const event = new Date(date);
             const options = {

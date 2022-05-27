@@ -29,13 +29,14 @@
         </div>
         <div class="post-footer accordion row" id="showcomments">
             <div class="accordion-item">
+             <CreateComment :postId="postId"  :onRefresh="() => getComs(postId)"/>   
                 <h4 class="accordion-header" id="heading-comments">
                     <button class="accordion-button  btn-transparent shadow-none collapsed p-1 m-1" @click="getComs(postId)"    type="button" data-bs-toggle="collapse" :data-bs-target="`#collapse-comments`+postId" aria-expanded="false" aria-controls="collapse-comments">
                         Commentaires
                     </button>
                 </h4>
                 <div :id="`collapse-comments`+postId" class="accordion-collapse collapse" aria-labelledby="heading-comments" data-bs-parent="#showcomments">
-                    <CommentCard :comments="comments"/>
+                    <CommentCard :comments="comments" :refreshComs="() => getComs(postId)" />
                 </div>
             </div>
         </div>
@@ -53,7 +54,7 @@
                                         <textarea v-model="editedContent" class="col-12 m-1" ></textarea>
                                     </div>
                                     <div class="input-group col-12 m-1">
-                                        <img  class="img-fluid" id="editedImg" :src="postImg">
+                                        <img  class="img-fluid width" id="editedImg" :src="postImg">
                                         <input class="btn-primary"  @change="uploadEditedImg"   id="uploadImg" aria-label="Ajoutez une photo " type="file" >
                                     </div>
                                     <button type="submit" class="btn btn-primary">Valider</button>
@@ -66,6 +67,7 @@
 <script>
 import axios from 'axios';
 import CommentCard from '../components/CommentCard.vue';
+import CreateComment from '../components/CreateComment.vue';
 export default {
     props:["authorImg","nom","prenom","editionDropdown","job","postId","postContent","postImg","date"],
     data: function(){
@@ -77,14 +79,11 @@ export default {
             showEdit:false,    
        }
    },
-
    components:{
-       CommentCard,
-
-
+       CommentCard,CreateComment,
    },
-
     methods:{
+
         deletePost:function(postId){
            const token = localStorage.getItem('token');
                axios.delete(`http://localhost:3000/api/posts/${postId}`,{
@@ -100,7 +99,6 @@ export default {
        },
        uploadEditedImg:function(e){
            this.files= e.target.files[0];
-
        },
         uploadPost:function(postId){
             const token = localStorage.getItem('token');
@@ -129,27 +127,24 @@ export default {
                 .catch(error=>{console.log(error)});
             }
         }, 
-        getComs:function(postId) {const token=localStorage.getItem('token');
-           axios.get(`http://localhost:3000/api/comments/${postId}`,{ 
+        getComs:function(postId) {
+            const token=localStorage.getItem('token');
+            axios.get(`http://localhost:3000/api/comments/${postId}`,{ 
                headers:{ 
                     Authorization: `Bearer ${token}` 
                }
            })
            .then( response=>{
-           this.comments=response.data[0];
-           
-
-
+           this.comments=response.data;
+           console.log(this.comments)          
            })
            .catch(error=>{
                console.log (error)
            })
-       },
-
+        },
             
-        }      
-    }
-
+    }      
+}
 </script>
 <style scoped>
 h3{
@@ -163,6 +158,10 @@ h4{
     color: rgb(234, 32, 32);
     margin:0.2em
 }
+#editedImg {
+  max-height: 15em;
+  object-fit: contain;
+}
 .row{
     --bs-gutter-x:0;
     --bs-gutter-y: 0;
@@ -173,14 +172,12 @@ h4{
     border-radius: 1.5em;
     box-shadow:0 0 0.5em hsla(0, 6%, 16.3%, 0.96);
     transition: all 0.3s ease-in-out;
-
 }
 .post-card:hover{
     filter: contrast(100%) saturate(100%);
     box-shadow: 0 0 0.5em hsl(5deg 88% 48% / 96%);
     transform:scale(101%);
     margin:0.8em;
-
 }
 .date{
     font-size: 0.7em;
@@ -193,7 +190,6 @@ h4{
 }
 .post_author_pic{
     width:80px;
-
 }
 .post-img{
     max-height: 45rem;
@@ -217,7 +213,4 @@ h4{
  border-bottom-right-radius:1.5em;
  border-bottom-left-radius:1.5em;
 }
-
 </style>
-
-
