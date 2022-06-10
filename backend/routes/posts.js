@@ -12,7 +12,6 @@ router.put("/:id",auth,authpost,multer,postCtrl.modifyPost);//modification de po
 router.delete("/:id",auth,authpost,multer,postCtrl.deletePost);//suppression depuis le fil d'actualité
 router.get("/user/:id",auth,postCtrl.getPostsUser);//reception des posts d'un utilisateur
 router.post("/user/:id",auth,authUser,multer,postCtrl.createPost);//création d'un post depuis le profil
-router.post("/share/:id",auth,multer,postCtrl.sharePost);
 router.put("/user/:id",auth,authpost,multer,postCtrl.modifyPost);//modification d'un post depuis le profil
 router.delete("/user/:id",auth,authpost,multer,postCtrl.deletePost);//supression d'un post depuis le profil
 
