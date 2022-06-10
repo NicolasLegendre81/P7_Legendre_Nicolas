@@ -1,27 +1,29 @@
 <template>
 <div class="container col-11 ">
     <div  class=" new-comment-card  row col-12 mt-2 mx-auto border-primary bg-light">
-        <div class="user-pic col-sm-3 col-2 m-1">
-            <img  class="img-fluid my-auto mx-auto rounded-circle bg-primary  " v-bind:src="profilePic" alt="Avatar de l'utilisateur">
+        <div class="user-pic-container col-2 mb-2 me-2">
+            <router-link :to="`/profil/${user_id}`">
+                <img  class="rounded-circle mb-4 bg-primary user-pic " 
+                v-bind:src="profilePic" alt="Avatar de l'utilisateur">
+            </router-link>
         </div>
-      <form @submit.prevent="sendCom" class="container-fluid row col-8 text-start form-comment"> 
-        <textarea  v-model="commentContent" 
-        class="content form-control col-7 my-1 p-1" aria-label="Commentez cette publication" 
-        placeholder="Commentez cette publication."></textarea>
-        <button class="btn-xs rounded-pill  col-7 mb-1 bg-danger bg-gradient text-white" type="submit">Commentez</button>
+        <form @submit.prevent="sendCom" class="container-fluid row col-8 ms-1 text-start form-comment"> 
+            <textarea  v-model="commentContent" 
+                class="content form-control col-7 my-1 p-1" aria-label="Commentez cette publication" 
+                placeholder="Commentez cette publication.">
+            </textarea>
+            <button class="btn-xs rounded-pill  col-7 my-1 bg-gradient text-white border-white custom-btn" type="submit">Commentez</button>
       </form> 
     </div>
-
 </div>   
 </template>
 <script>
 import axios from 'axios';
 export default {
     name:"CreateComment",
-    props: ['postId', 'onRefresh'],
+    props: ['postId', 'onRefresh',"profilePic"],
     data() {
      return {
-       profilePic:localStorage.getItem('profilePic'),
        commentContent:"",
        user_id:localStorage.getItem("userId"),
        comment:"",
@@ -29,9 +31,8 @@ export default {
      }
    },
    methods: {
-       sendCom: function() {
+        sendCom: function() {
            const self =this;
-           console.log(this.token)
            if(this.commentContent != '') {
                axios.post('http://localhost:3000/api/comments/',{
                     comment_content: this.commentContent,
@@ -44,13 +45,13 @@ export default {
                 },
            })
            .then(function(response){
-                console.log(response)
+                console.log(response.data.message)
                 self.onRefresh()
             })
             .catch(error=>{console.log(error)}); 
            }
        }
-   }
+    }
 }
 </script>
 <style scoped>
@@ -59,5 +60,10 @@ export default {
 }
 .content{
     height:2em;
+}
+.user-pic{
+    width:2.5rem;
+    height: 2.5rem;
+    object-fit: cover;
 }
 </style>
