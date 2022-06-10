@@ -1,12 +1,14 @@
 const express = require ('express');
 const db = require ('./config/db')
 const bodyparser = require('body-parser');
+const morgan = require('morgan')
 const path = require ('path');
 const userRoute = require ('./routes/user');
 const postRoute = require ('./routes/posts');
 const commentsRoute = require ('./routes/comments');
   
 const app = express();
+app.use(morgan('dev'))
 //middleware Cors
 app.use((req, res, next) => {
     res.setHeader('Access-Control-Allow-Origin', '*');
