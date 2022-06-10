@@ -1,9 +1,9 @@
-import { createRouter, createWebHashHistory } from 'vue-router'
-/* eslint-disable */
+import  {createWebHistory, createRouter} from 'vue-router'
 import HomePage from "../views/HomePage.vue"
 import WallPage from "../views/WallPage.vue"
-import Signup from "../components/Signup.vue"
+import SignUp from "../components/SignUp.vue"
 import Login from "../components/Login.vue"
+import GetProfile from "../components/GetProfile.vue"
 
 const routes = [
   {
@@ -18,23 +18,26 @@ const routes = [
   },
   {
     path:'/signup',
-    name: 'Signup',
-    component: Signup,
+    name: 'SignUp',
+    component: SignUp,
 
   },
   {
     path:'/login',
     name: 'Login',
     component: Login,
+  },
+  {
+    path:'/profil/:id',
+    name:'GetProfile',
+    component:GetProfile,
   }
-
-
-
 ]
 
 const router = createRouter({
-  history: createWebHashHistory(),
-  routes
+  mode:history,
+  history: createWebHistory(),
+  routes,
 })
 
-export default router
+export default router;
