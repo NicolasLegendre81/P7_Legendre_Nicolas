@@ -1,17 +1,15 @@
 <template>
-<div class="container-fluid">
-    <div class="home-container">
-        <Login/>
-        <div class="welcome-message">
-            <h3>
+    <div class="container-fluid">
+        <div class="home-container">
+            <Header/>
+            <Login/>
+            <div class="welcome-message">
+                <h3>
                 Bienvenue sur le réseau social de VOTRE entreprise!
-            </h3>
-
+                </h3>
+            </div>
         </div>
-
-    </div>
-</div>      
-    
+    </div>        
 </template>
 <style scoped>
 .welcome-message{
@@ -20,30 +18,20 @@
     text-shadow: rgb(209, 208, 205) 1px 0 2px;
     text-align: center;
     margin-top: 3em;
-    position:sticky;
-
-    
-    
+    position:sticky;       
 }
-
-
 img{
     margin:0;
     padding:0;
 }
-
 </style>
 <script>
 import Login from'../components/Login.vue';
-
+import Header from'../components/Header.vue';
 export default ({
     name:"HomePage",
-
-   components:{ 
-       Login,
-   },
-   
+    components:{ 
+       Login,Header,
+     },   
 });
-
-
 </script>
