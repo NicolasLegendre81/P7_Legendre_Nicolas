@@ -1,20 +1,17 @@
 const fs = require ('fs');
-const { resolve } = require('path');
 const db = require ('../config/db');
-
 
 exports.createCom=(req,res,next) =>{
     try{
-        db.query(`INSERT INTO comments (comment_content,post_id,comment_author_id) VALUES (?,?,?)`,
+        db.query(`INSERT INTO comments (comment_content,post_id,comment_Author_id) VALUES (?,?,?)`,
         [req.body.comment_content,req.body.post_id,req.body.user_id],(err,result) =>{
-        if (err){
+            if (err){
             throw err
-        }else{
-            res.status(201).json({message :'Votre commentaire a été publié'});
-        }
+            }else{
+                res.status(201).json({message :'Votre commentaire a été publié'});
+            }
         });    
     }catch(error){console.error[error]}
-
 };
 exports.getComs = (req,res,next) =>{
     try{
@@ -42,18 +39,19 @@ exports.deleteComs = (req,res,next) =>{
             if(err){
                 throw err
             }else{
-                return res.status(201).json(result);
+                return res.status(201).json({message:"Votre commentaire a été supprimé"});
             }
         });
     } catch (error){console.error(error)}
 };
 exports.modifyComs = (req,res,next) =>{
     try {
-        db.query(`UPDATE comments SET comment_content = "${req.body.comment_content}" WHERE comment_id = ${req.params.id}`,(err,result) =>{
+        db.query(`UPDATE comments SET comment_content = "${req.body.comment_content}"
+         WHERE comment_id = ${req.params.id}`,(err,result) =>{
             if(err){
                 throw err
             } else {
-                return res.status(201).json(result)
+                return res.status(201).json({message :'Votre commentaire a été modifié'})
             }
         });
     } catch (error) {console.error(error)}
