@@ -8,7 +8,6 @@ module.exports = (req,res,next) =>{
        if ((result[0].user_id === user_id||decodedToken.isAdmin)){ next();
        }else{
         res.status(401).json({ message:'Vous ne pouvez pas modifier ce commentaire'});
-    }
-    
+        }
     });
 };
