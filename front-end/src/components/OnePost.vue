@@ -29,7 +29,7 @@
         </div>
         <div class="post-body row bg-light col-11 mx-auto">
             <span class="py-3 post-content" v-if="postContent != null">{{postContent}}</span>
-            <img class="img-fluid pt-1 pb-5 px-5 post-img" v-if="postImg != null" v-bind:src="postImg">   
+            <img class="img-fluid p-3 post-img" v-if="postImg != null" v-bind:src="postImg">   
         </div>
         <div class="col-12 pt-2 pe-3 text-end modify-date">
             <span class="date text-muted"> Publié le  {{ date }} </span>
@@ -204,7 +204,7 @@ h4{
     object-fit: cover;
 }
 .post-img{
-    max-height: 45rem;
+    max-height: 25rem;
     object-fit: contain;
 }
 .accordion-item::before{
