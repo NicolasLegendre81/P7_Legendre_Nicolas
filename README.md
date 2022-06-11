@@ -43,14 +43,14 @@ http://localhost:8080/
 Il est bpossible de
 <ul>
   <li>Partager une publication depuis le fil d'actualité et depuis son propre profil (avec ou sans photo)</li>
-  <li>Modifier et supprimer  ses propres publications <li>
+  <li>Modifier et supprimer  ses propres publications 
   <li>Commenter une publication</li>
-  <li>Supprimer et modifier ses commentaires<li>
+  <li>Supprimer et modifier ses commentaires</li>
   <li>Personnaliser son profil (photo de profil,Nom,adresse-e-mail,changement de mot de passe etc... )</li>
-  <li>Consulter, modifier et supprimer ses publications depuis son propre profil<li>
+  <li>Consulter, modifier et supprimer ses publications depuis son propre profil</li>
   <li>Consulter le profil des autres utilisateurs en cliquant sur l'avatar de ceux ci sur une publication ou un commentaire</li>
-  <li>Supprimer son propre profil<li>
-  <li>Se deconnecter<li>
+  <li>Supprimer son propre profil</li>
+  <li>Se deconnecter</li>
 </ul>
 
 
