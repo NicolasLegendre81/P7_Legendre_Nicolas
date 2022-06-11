@@ -42,7 +42,7 @@ http://localhost:8080/
 ### Fonctionalités de l'application
 Il est possible de :
 <ul>
-  <li>Partager une publication depuis le fil d'actualité et depuis son propre profil (avec ou sans photo)</li>
+  <li>Publier un post depuis le fil d'actualité et depuis son propre profil (avec ou sans photo)</li>
   <li>Modifier et supprimer  ses propres publications 
   <li>Commenter une publication</li>
   <li>Supprimer et modifier ses commentaires</li>
