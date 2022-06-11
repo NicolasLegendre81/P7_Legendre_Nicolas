@@ -40,7 +40,7 @@ Cliquez sur le lien renvoyé par le terminal ou bien rendez vous à l'adresse:
 http://localhost:8080/
 ```
 ### Fonctionalités de l'application
-Il est bpossible de
+Il est possible de :
 <ul>
   <li>Partager une publication depuis le fil d'actualité et depuis son propre profil (avec ou sans photo)</li>
   <li>Modifier et supprimer  ses propres publications 
