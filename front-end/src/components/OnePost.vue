@@ -60,7 +60,7 @@
                     <h5 class="modal-title">Modifier la publication</h5>
                     <button type="button" class="btn-close bg-secondary col-1 ms-auto pt-2" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <form class="modal-body text-left col-sm-12" @submit="uploadPost(postId)" enctype="multipart/form-data" >
+                <form class="modal-body text-left col-sm-12" @submit.prevent="false" enctype="multipart/form-data" >
                     <div class="col-12">
                         <label for="editedContent">Modifiez votre publication:</label>
                         <textarea v-model="editedContent" class="col-12 m-1" ></textarea>
@@ -69,7 +69,7 @@
                         <img  class="img-fluid width" id="editedImg" :src="postImg">
                         <input class="btn-primary"  @change="uploadEditedImg"   id="uploadImg" aria-label="Ajoutez une photo " type="file" >
                     </div>
-                    <button type="submit" class="btn-sm bg-gradient text-white border-white custom-btn ">Valider</button>
+                    <button type="submit" @click="uploadPost(postId)" class="btn-sm bg-gradient text-white border-white custom-btn ">Valider</button>
                 </form>                               
             </div>
         </div>

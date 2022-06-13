@@ -12,7 +12,7 @@
                     </li>
                 </ul>
             </div>
-            <form class="col g-2 mt-3 mb-3" @submit.prevent="signup">
+            <form class="col g-2 mt-3 mb-3" @submit.prevent="false">
                 <p v-if="errors.length">
                     <b>Il y a un problème avec les éléments renseignés dans les champs suivants:</b>
                     <ul>

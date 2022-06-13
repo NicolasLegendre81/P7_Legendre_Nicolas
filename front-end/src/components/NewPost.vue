@@ -7,7 +7,7 @@
             alt="Avatar de l'utilisateur et lien vers la page de profil">
         </router-link>
       </div>
-      <form  class="panel-panel-default text-left col-9" @submit.prevent="sendpost" enctype="multipart/form-data"> 
+      <form  class="panel-panel-default text-left col-9" @submit.prevent="false" enctype="multipart/form-data"> 
         <div class="text-white my-2 mx-1 panel-body">
           <div class="form-floating">
             <textarea v-model="postContent" class="form-control text-white rounded-pill bg-secondary bg-gradient mt-3 mb-1" 
@@ -24,7 +24,7 @@
           </div>       
         </div>
           <div class="mt-2 mb-3 mx-auto send-post">
-          <button class="btn-sm col-3 col-md-2 rounded-pill bg-gradient text-white border-white custom-btn" type="submit">Publiez</button>
+          <button class="btn-sm col-3 col-md-2 rounded-pill bg-gradient text-white border-white custom-btn" @click="sendpost()" type="submit">Publiez</button>
           </div>
       </form>
     </div>

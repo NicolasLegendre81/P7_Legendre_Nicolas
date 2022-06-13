@@ -41,7 +41,7 @@
                         <p>Vous êtes sur le point de supprimer le compte {{user.nom}} {{user.prenom}}!</p><br>
                         <p>La suppression sera définitive</p>
                         <div class="row">
-                            <button type="submit" @click="deleteProfil" alt="Confirmer la Suppression" 
+                            <button type="submit" @click="deleteProfil()" alt="Confirmer la Suppression" 
                                 aria-label="Confirmer la suppression" class="btn-sm col-4 mx-auto my-1 text-white custom-btn">Confirmer</button>
                             <button type="button" class="btn-sm btn-secondary col-4 my-1 mx-auto return-btn" 
                                 @click="closeIsDeleting" alt="Annuler" aria-label="Annuler">Annuler
@@ -60,25 +60,25 @@
                          @click.prevent="closeIsEditingInfos(user.user_id)" aria-label="Close"></button>
                     </div>
                     <div class="row text-dark card-body">
-                        <form class="form-group col-md-6 mb-2" @submit.prevent="changeName" >
+                        <form class="form-group col-md-6 mb-2" @submit.prevent="false" >
                             <label for="nom" class="col-form-label">Nom</label>
                             <input @keyup="validName" v-model="nom" type="text" class="form-control" id="nom" aria-describedby="button-nom">
                             <button class="btn-sm text-white mt-1 custom-btn" @click="changeName()" type="submit">Editer</button>
                             <p class="text-danger" id="nom-msg">{{errors.nom}}</p>
                         </form>
-                        <form class="form-group col-md-6 mb-2" @submit.prevent="changePrenom">
+                        <form class="form-group col-md-6 mb-2" @submit.prevent="false">
                             <label for="prenom" class="col-form-label">Prénom</label>
                             <input @keyup="validPrenom" v-model = "prenom" type="text" class="form-control" id="prenom">
                             <button class="btn-sm text-white mt-1 custom-btn" @click="changePrenom()" type = "submit">Editer</button>
                             <p class="text-danger" id="prenom-msg">{{errors.prenom}}</p>
                         </form>
-                        <form class="form-group col-md-6 mb-2" @submit.prevent = "changeMail">
+                        <form class="form-group col-md-6 mb-2" @submit.prevent ="false">
                             <label  for = "Email" class="col-form-label">Email</label>
                             <input  @keyup="validMail" v-model="Email" type="text" class="form-control" id="Email" >
                             <button class="btn-sm text-white mt-1 custom-btn" @click="changeMail()" type = "submit">Editer</button>
                             <p class = "text-danger" id="mail-msg">{{errors.email}}</p>
                         </form>
-                        <form class="form-group col-md-6 mb-3" @submit.prevent="changeJob">
+                        <form class="form-group col-md-6 mb-3" @submit.prevent="false">
                             <label  for="job" class="col-form-label">Poste</label>
                             <input v-model="job" type = "text" class="form-control" id = "job" >
                             <button class="btn-sm text-white mt-1 custom-btn"  @click="changeJob()" type="submit">Editer</button>
@@ -89,7 +89,7 @@
                             <input  @keyup="validPassword" v-model="password" type="password" class="form-control" id="password">
                             <p class="text-danger" id="password-msg">{{errors.password}}</p>
                         </form>
-                        <form class="form-group col-12 mb-2" @submit.prevent="changePassword">
+                        <form class="form-group col-12 mb-2" @submit.prevent="false">
                             <label for="passwordConfirm" class="col-form-label">Confirmer le mot de passe</label>
                             <input @keyup="passwordConfirmation" v-model="passwordConfirm" type="password" class="form-control" id="passwordConfirm">
                             <button class="btn-sm text-white mt-1 custom-btn" @click="changePassword()" type="submit">Editer</button>
@@ -178,7 +178,6 @@ export default ({
                 .then(function(response){
                     console.log(response.data);
                     self.getUserInfos();
-                    location.reload();  
                 })
                 .catch(error => {console.log(error)});
             }
@@ -193,16 +192,17 @@ export default ({
             document.getElementById("delete-profil-card").className = "card d-none";
         },
         deleteProfil:function(){
-            const self = this
+            const self = this;
             axios.delete(`http://localhost:3000/api/auth/user/profile/${this.userId}`,
                 {headers:{
                     Authorization: `Bearer ${self.token}`
                 }
             })
             .then (function (response){
-                console.log(response.data.data.message);
-                // self.$router.push('/');
+                console.log(response);
+                self.$router.push("/");
             })
+            .catch(error => {console.log(error)});
         },
         isEditingInfos:function(){
             document.getElementById("edit-infos-card").className = "card";

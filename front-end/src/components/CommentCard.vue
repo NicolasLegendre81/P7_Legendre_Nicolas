@@ -39,12 +39,12 @@
                             @click="closeEdit(comment.comment_id)" aria-label="Close">
                          </button>
                     </div>
-                    <form class="card-body text-left col-sm-12" @submit="uploadCom(comment.comment_id)" >
+                    <form class="card-body text-left col-sm-12" @submit.prevent="false" >
                         <div class="col-12">
                             <label for="editedCom"></label>
                             <textarea v-model="editedCom[comment.comment_id]" class="col-12 m-1" ></textarea>
                         </div>
-                        <button type="submit" class="btn-sm text-white border-white custom-btn ">Valider</button>
+                        <button type="submit" @click="uploadCom (comment.comment_id)" class="btn-sm text-white border-white custom-btn ">Valider</button>
                     </form>   
                 </div>
             </div> 
