@@ -12,7 +12,7 @@
                     </li>
                 </ul>
             </div>
-            <form class="col g-2 mt-3 mb-3" @submit="signup">
+            <form class="col g-2 mt-3 mb-3" @submit.prevent="signup">
                 <p v-if="errors.length">
                     <b>Il y a un problème avec les éléments renseignés dans les champs suivants:</b>
                     <ul>
@@ -42,7 +42,7 @@
                     <input v-model="poste" type="text" class="form-control" id="poste" placeholder="Ex:Technicien informatique">
                 </div>
                 <div id="submit-btn" class="col-auto">
-                   <button id="btn" type="submit" class="btn btn-secondary bg-danger">Inscrivez-vous</button>
+                   <button id="btn" type="submit" @click="signup()" class="btn btn-secondary bg-danger">Inscrivez-vous</button>
                 </div>
             </form>
         </div>
