@@ -71,28 +71,38 @@ export default {
             const nomRE = new RegExp ("^[a-zA-ZÀ-ÿ]+(\\s?\\.?,?'?-?[a-zA-ZÀ-ÿ])+$");
             const posteRe = new RegExp ("^[a-zA-ZÀ-ÿ]+(\\s?\\.?,?'?-?[a-zA-ZÀ-ÿ])+$");
             const self = this;
-            if(!this.email || !emailRe.test(this.email)){            
+            this.errors = []
+
+            const user = {
+                email: this.email != '' && emailRe.test(this.email),
+                password: this.password != '' && passwordRe.test(this.password),
+                nom: this.nom != '' && nomRE.test(this.nom),
+                prenom: this.prenom != '' && nomRE.test(this.prenom),
+                poste: this.poste != '' && posteRe.test(this.poste)
+            }
+
+            if(!user.email){            
                 this.errors.push("Email invalide ");            
             }
-            if(!this.password || !passwordRe.test(this.password)){
+            if(!user.password){
                 this.errors.push("Votre Mot de passe doit comporter au Moins 8 caractéres dont : 1 chiffre entre 0 et 9, 1 lettre majuscule et une lettre minuscule.");
             }
-            if(!this.nom || !nomRE.test(this.nom)){
+            if(!user.nom){
                 this.errors.push('Veuillez renseigner votre nom de famille.');
             }
-            if(!this.nom || !nomRE.test(this.prenom)){
+            if(!user.prenom){
                 this.errors.push('Veuillez renseigner votre prénom.');
             }
-            if(!this.poste || !posteRe.test(this.poste)){
+            if(!user.poste){
                 this.errors.push('Veuillez renseigner votre fonction dans la société.');
             }
-            if(!this.errors.length){  
+            if(user.email && user.password && user.nom && user.prenom && user.poste){  
                 axios.post("http://localhost:3000/api/auth/signup",{
-                    email:this.email,
-                    password:this.password,
-                    nom:this.nom,
-                    prenom:this.prenom,
-                    position_in_company:this.poste,    
+                    email: this.email,
+                    password: this.password,
+                    nom: this.nom,
+                    prenom: this.prenom,
+                    position_in_company: this.poste,    
                 })
                 .then(function(response){
                    let successMsg = document.createElement("p");
@@ -106,6 +116,7 @@ export default {
                    login.href = ("http://localhost:8080/?#/login");
                    login.innerHTML = ("Connectez-vous");
                    successMsg.appendChild(login);
+                   self.errors = []
                 })
                 .catch(function(error) {
                     console.log(error.response.data);

@@ -4,8 +4,12 @@
             <img class="img-fluid rounded-circle mt-3 " v-bind:src="user.imageUrl" 
                 alt="Avatar de l'utilisateur">
             <div class="editpic" v-if="userId==user.user_id||isAdmin==1">
-                <FileButton :Message ="`Modifiez votre avatar`"
-                        :uploadFile = "uploadImg"/>
+                <FileButton 
+                    :Message ="`Modifiez votre avatar`"
+                    :uploadFile = "uploadImg"
+                    :file_name="file_name"
+                    :new_file="new_file"
+                />
                 <div class="mt-2 mb-3">
                     <button class="btn-sm rounded-pill bg-gradient text-white custom-btn" type="submit">Valider</button>
                 </div>
@@ -64,36 +68,42 @@
                             <label for="nom" class="col-form-label">Nom</label>
                             <input @keyup="validName" v-model="nom" type="text" class="form-control" id="nom" aria-describedby="button-nom">
                             <button class="btn-sm text-white mt-1 custom-btn" @click="changeName()" type="submit">Editer</button>
-                            <p class="text-danger" id="nom-msg">{{errors.nom}}</p>
+                            <p v-if="success.nom != ''" class="alert text-success alert-success" id="nom-msg">{{success.nom}}</p>
+                            <p v-if="errors.nom != ''" class="alert text-success text-danger" id="nom-msg">{{errors.nom}}</p>
                         </form>
                         <form class="form-group col-md-6 mb-2" @submit.prevent="false">
                             <label for="prenom" class="col-form-label">Prénom</label>
                             <input @keyup="validPrenom" v-model = "prenom" type="text" class="form-control" id="prenom">
                             <button class="btn-sm text-white mt-1 custom-btn" @click="changePrenom()" type = "submit">Editer</button>
-                            <p class="text-danger" id="prenom-msg">{{errors.prenom}}</p>
+                            <p v-if="success.prenom != ''" class="alert text-success alert-success" id="prenom-msg">{{success.prenom}}</p>
+                            <p v-if="errors.prenom != ''" class="alert text-success text-danger" id="prenom-msg">{{errors.prenom}}</p>
                         </form>
                         <form class="form-group col-md-6 mb-2" @submit.prevent ="false">
                             <label  for = "Email" class="col-form-label">Email</label>
                             <input  @keyup="validMail" v-model="Email" type="text" class="form-control" id="Email" >
                             <button class="btn-sm text-white mt-1 custom-btn" @click="changeMail()" type = "submit">Editer</button>
-                            <p class = "text-danger" id="mail-msg">{{errors.email}}</p>
+                            <p v-if="success.email != ''" class = "alert text-success alert-success" id="mail-msg">{{success.email}}</p>
+                            <p v-if="errors.email != ''" class = "alert text-success text-danger" id="mail-msg">{{errors.email}}</p>
                         </form>
                         <form class="form-group col-md-6 mb-3" @submit.prevent="false">
                             <label  for="job" class="col-form-label">Poste</label>
                             <input v-model="job" type = "text" class="form-control" id = "job" >
                             <button class="btn-sm text-white mt-1 custom-btn"  @click="changeJob()" type="submit">Editer</button>
-                            <p class="text-danger" id="job-msg">{{errors.job}}</p>
+                            <p v-if="success.job != ''" class="alert text-success alert-success" id="job-msg">{{success.job}}</p>
+                            <p v-if="errors.job != ''" class="alert text-success text-danger" id="job-msg">{{errors.job}}</p>
                         </form>
                         <form class="form-group col-12 mb-2">
                             <label for="password" class="col-form-label">Nouveau mot de passe</label>
                             <input  @keyup="validPassword" v-model="password" type="password" class="form-control" id="password">
-                            <p class="text-danger" id="password-msg">{{errors.password}}</p>
+                            <p v-if="success.password != ''" class="alert text-success alert-success" id="password-msg">{{success.password}}</p>
+                            <p v-if="errors.password != ''" class="alert text-success text-danger" id="password-msg">{{errors.password}}</p>
                         </form>
                         <form class="form-group col-12 mb-2" @submit.prevent="false">
                             <label for="passwordConfirm" class="col-form-label">Confirmer le mot de passe</label>
                             <input @keyup="passwordConfirmation" v-model="passwordConfirm" type="password" class="form-control" id="passwordConfirm">
                             <button class="btn-sm text-white mt-1 custom-btn" @click="changePassword()" type="submit">Editer</button>
-                            <p class="text-danger" id="passwordConfirm-msg">{{errors.passwordConfirm}}</p>
+                            <p v-if="success.passwordConfirm != ''" class="alert text-success alert-success" id="passwordConfirm-msg">{{success.passwordConfirm}}</p>
+                            <p v-if="errors.passwordConfirm != ''" class="alert text-success text-danger" id="passwordConfirm-msg">{{errors.passwordConfirm}}</p>
                         </form>
                     </div>   
                 </div>
@@ -118,24 +128,37 @@ export default ({
             token : localStorage.getItem('token'),
             isAdmin :localStorage.getItem('isAdmin'),
             img :"",
-            errors:{ nom:"",
-                     prenom:"",
-                     email:"",
-                     job:"",
-                     password:"",
-                     passwordConfirm:"",
-                     },
+            errors:{ 
+                nom:"",
+                prenom:"",
+                email:"",
+                job:"",
+                password:"",
+                passwordConfirm:"",
+            },
+            success: {
+                nom:"",
+                prenom:"",
+                email:"",
+                job:"",
+                password:"",
+                passwordConfirm:"",
+            },
             nom:"",
             prenom:"",
             Email:"",
             job:"",
             password:"",
             passwordConfirm:"",
-            validation:{ nom:false,
-                         prenom:false,
-                         email:false,
-                         password:false,
-                         confirmPassword:false,},
+            validation:{ 
+                nom:false,
+                prenom:false,
+                email:false,
+                password:false,
+                confirmPassword:false,
+            },
+            file_name: '',
+            new_file: ''
         }
     },
     created(){
@@ -176,7 +199,9 @@ export default ({
                  },
                 })
                 .then(function(response){
-                    console.log(response.data);
+                    console.log(response.data.message);
+                    self.file_name = ''
+                    self.new_file = ''
                     self.getUserInfos();
                 })
                 .catch(error => {console.log(error)});
@@ -228,12 +253,12 @@ export default ({
                     }}
                 )
                 .then (function (response){
-                    document.getElementById("nom-msg").className = "alert  text-success alert-success";
-                    self.errors.nom = response.data.message;
+                    self.success.nom = response.data.message
+                    self.errors.nom = ''
                 })
                 .catch(error => {console.log(error)});
             }else{ 
-                document.getElementById("nom-msg").className = "alert  text-success alert-danger";
+                self.success.nom = ''
                 self.errors.nom = response.data.message
             }
         },
@@ -243,6 +268,7 @@ export default ({
             if(!self.nom||!nomRE.test(self.nom)){
                 document.getElementById("nom").className = "form-control is-invalid" ; 
                 self.errors.nom = "Le nom que vous avez choisi semble particulier!";
+                self.success.nom = ''
                 self.validation.nom = false ;   
             }else{
                 document.getElementById("nom").className = "form-control is-valid" ;
@@ -263,13 +289,13 @@ export default ({
                     }}
                 )
                 .then (function (response){
-                    document.getElementById("prenom-msg").className = "alert text-success alert-success";
-                    self.errors.prenom = response.data.message;
+                    self.success.prenom = response.data.message
+                    self.errors.prenom = ''
                 })
                 .catch(error => {console.log(error)});
             }else{ 
-                document.getElementById("prenom-msg").className = "alert text-success alert-danger";
-                self.errors.prenom = response.data.message;
+                    self.success.prenom = ''
+                    self.errors.prenom = response.data.message
                 }
         },
         validPrenom:function(){
@@ -278,6 +304,7 @@ export default ({
             if(!self.prenom||!nomRE.test(self.prenom)){
                 document.getElementById("prenom").className = "form-control is-invalid";
                 self.errors.prenom = "Le Prénom choisi n'est pas admis sur cette planéte!";
+                self.success.prenom = ''
                 self.validation.prenom = false;
             }else{ 
                 document.getElementById("prenom").className = "form-control is-valid";
@@ -298,13 +325,16 @@ export default ({
                         }}
                 )
                 .then (function (response){
-                    document.getElementById("mail-msg").className = "alert  text-success alert-success";
-                    self.errors.email = response.data.message;
+                    
+                    self.success.email = response.data.message
+                    self.errors.email = ''
+                    
                 })
                     .catch(error => {console.log(error)});
             }else{
-                 document.getElementById("mail-msg").className = "alert  text-success alert-danger";
-                    self.errors.email = response.data.message;}
+                self.success.email = ''
+                self.errors.email = response.data.message
+            }
         },
         validMail:function(){
             const emailRE = new RegExp ("^[a-zA-Z0-9.-_]+[@]{1}[a-zA-Z0-9.-_]+[.]{1}[a-z]{2,10}$");
@@ -312,6 +342,7 @@ export default ({
             if(!self.Email||!emailRE.test(self.Email)){
                 document.getElementById("Email").className = "form-control is-invalid";
                 self.errors.email="Votre adresse email parait infernale!";
+                self.success.email = ''
                 self.validation.email = false;
             }else{
                 document.getElementById("Email").className = "form-control is-valid";
@@ -319,7 +350,7 @@ export default ({
                 self.validation.email = true;
             }               
         },
-        changeJob:function(e){
+        changeJob:function(){
             if(this.job != ""){
                 const self = this
                 axios.put(`http://localhost:3000/api/auth/user/profile/${this.userId}`,{
@@ -332,12 +363,14 @@ export default ({
                         }    
                 })
                 .then (function (response){
-                        document.getElementById("job").className = "form-control is-valid" ;
-                        document.getElementById("job-msg").className = "alert  text-success alert-success";
-                        self.errors.job = response.data.message;
+                        self.success.job = response.data.message
+                        self.errors.job = ''
                     })
                 .catch(error => {console.log(error)});
-            }else{ e.preventDefault()}     
+            }else{ 
+                self.success.job = ''
+                self.errors.job = 'Veuillez completer le champs'
+            }     
         },
         changePassword:function(response){
             const self = this;
@@ -348,19 +381,22 @@ export default ({
                     {headers:{Authorization: `Bearer ${self.token}`}}
                 )
                 .then (function (response){
-                    document.getElementById("passwordConfirm-msg").className = "alert  text-success alert-success";
-                    self.errors.passwordConfirm = response.data.message;
+                    self.success.passwordConfirm = response.data.message
+                    self.errors.passwordConfirm = ''
+
                 })
                 .catch(error => {console.log(error)});
             }else{ 
-                document.getElementById("passwordConfirm-msg").className = "alert  text-success alert-danger";
-                self.errors.passwordConfirm = response.data.message;}     
+                self.success.passwordConfirm = ''
+                self.errors.passwordConfirm = response.data.message
+            }     
         },
         validPassword:function(){
             const passwordRe = new RegExp('^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$');
             const self = this;
             if(!self.password||!passwordRe.test(self.password)){
                 document.getElementById("password").className = "form-control is-invalid";
+                self.success.passwordConfirm = ''
                 self.errors.password=
                 "Votre Mot de passe doit comporter au Moins 8 caractéres dont : 1 chiffre entre 0 et 9, 1 lettre majuscule et une lettre minuscule.";
                 self.validation.password = false;

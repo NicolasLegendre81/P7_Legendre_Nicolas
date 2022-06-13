@@ -116,9 +116,12 @@ export default {
             for (const i of Object.keys(this.files)) {
              formData.append('files', this.files[i]);
             }
-            if(this.editedContent != ''){
+            if(this.editedContent){
              formData.append("post",this.editedContent);
-            }            
+            }
+            if(this.editedContent =="") {
+              formData.append("post","");  
+            }         
             if(this.files){
              formData.append("image",this.files);
             }

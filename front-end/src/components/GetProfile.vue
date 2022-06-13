@@ -52,7 +52,8 @@ export default({
          if(user.user_id == this.userId){
             localStorage.removeItem("profilePic")
             localStorage.setItem("profilePic",this.user.imageUrl)
-            this.userImg = localStorage.getItem("profilePic")         
+            this.userImg = localStorage.getItem("profilePic")    
+            this.getUserPosts()     
          }
       },
       getUserPosts:function(){

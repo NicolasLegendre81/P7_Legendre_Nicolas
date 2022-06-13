@@ -73,6 +73,8 @@ export default ({
         .then(function(response){
           console.log(response.data.message);
           self.getRefresh();
+          self.files = ''
+          self.filename = ''
         } )
         .catch(error => {console.log(error)});
       }
