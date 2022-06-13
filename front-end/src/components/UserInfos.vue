@@ -60,28 +60,28 @@
                          @click.prevent="closeIsEditingInfos(user.user_id)" aria-label="Close"></button>
                     </div>
                     <div class="row text-dark card-body">
-                        <form class="form-group col-md-6 mb-2" @submit="changeName" >
+                        <form class="form-group col-md-6 mb-2" @submit.prevent="changeName" >
                             <label for="nom" class="col-form-label">Nom</label>
                             <input @keyup="validName" v-model="nom" type="text" class="form-control" id="nom" aria-describedby="button-nom">
-                            <button class="btn-sm text-white mt-1 custom-btn" type="submit">Editer</button>
+                            <button class="btn-sm text-white mt-1 custom-btn" @click="changeName()" type="submit">Editer</button>
                             <p class="text-danger" id="nom-msg">{{errors.nom}}</p>
                         </form>
-                        <form class="form-group col-md-6 mb-2" @submit="changePrenom">
+                        <form class="form-group col-md-6 mb-2" @submit.prevent="changePrenom">
                             <label for="prenom" class="col-form-label">Prénom</label>
                             <input @keyup="validPrenom" v-model = "prenom" type="text" class="form-control" id="prenom">
-                            <button class="btn-sm text-white mt-1 custom-btn" type = "submit">Editer</button>
+                            <button class="btn-sm text-white mt-1 custom-btn" @click="changePrenom()" type = "submit">Editer</button>
                             <p class="text-danger" id="prenom-msg">{{errors.prenom}}</p>
                         </form>
-                        <form class="form-group col-md-6 mb-2" @submit = "changeMail">
+                        <form class="form-group col-md-6 mb-2" @submit.prevent = "changeMail">
                             <label  for = "Email" class="col-form-label">Email</label>
                             <input  @keyup="validMail" v-model="Email" type="text" class="form-control" id="Email" >
-                            <button class="btn-sm text-white mt-1 custom-btn" type = "submit">Editer</button>
+                            <button class="btn-sm text-white mt-1 custom-btn" @click="changeMail()" type = "submit">Editer</button>
                             <p class = "text-danger" id="mail-msg">{{errors.email}}</p>
                         </form>
-                        <form class="form-group col-md-6 mb-3" @submit="changeJob">
+                        <form class="form-group col-md-6 mb-3" @submit.prevent="changeJob">
                             <label  for="job" class="col-form-label">Poste</label>
                             <input v-model="job" type = "text" class="form-control" id = "job" >
-                            <button class="btn-sm text-white mt-1 custom-btn" type="submit">Editer</button>
+                            <button class="btn-sm text-white mt-1 custom-btn"  @click="changeJob()" type="submit">Editer</button>
                             <p class="text-danger" id="job-msg">{{errors.job}}</p>
                         </form>
                         <form class="form-group col-12 mb-2">
@@ -89,10 +89,10 @@
                             <input  @keyup="validPassword" v-model="password" type="password" class="form-control" id="password">
                             <p class="text-danger" id="password-msg">{{errors.password}}</p>
                         </form>
-                        <form class="form-group col-12 mb-2" @submit="changePassword">
+                        <form class="form-group col-12 mb-2" @submit.prevent="changePassword">
                             <label for="passwordConfirm" class="col-form-label">Confirmer le mot de passe</label>
                             <input @keyup="passwordConfirmation" v-model="passwordConfirm" type="password" class="form-control" id="passwordConfirm">
-                            <button class="btn-sm text-white mt-1 custom-btn" type="submit">Editer</button>
+                            <button class="btn-sm text-white mt-1 custom-btn" @click="changePassword()" type="submit">Editer</button>
                             <p class="text-danger" id="passwordConfirm-msg">{{errors.passwordConfirm}}</p>
                         </form>
                     </div>   
@@ -215,7 +215,7 @@ export default ({
             document.getElementById("edit-infos-card").className = "card d-none"
             this.getUserInfos();
         },
-        changeName:function(ev){
+        changeName:function(response){
             const self = this ;
             if(self.validation.nom == true){
                 axios.put(`http://localhost:3000/api/auth/user/profile/${this.userId}`,{
@@ -232,7 +232,10 @@ export default ({
                     self.errors.nom = response.data.message;
                 })
                 .catch(error => {console.log(error)});
-            }else{ ev.preventDefault()}
+            }else{ 
+                document.getElementById("nom-msg").className = "alert  text-success alert-danger";
+                self.errors.nom = response.data.message
+            }
         },
         validName:function(){
             const nomRE = new RegExp ("^[a-zA-ZÀ-ÿ]+(\\s?\\.?,?'?-?[a-zA-ZÀ-ÿ])+$");
@@ -247,7 +250,7 @@ export default ({
                 self.validation.nom = true;
             }
         },
-        changePrenom:function(event){
+        changePrenom:function(response){
             const self = this;
             if(self.validation.prenom == true){
                 axios.put(`http://localhost:3000/api/auth/user/profile/${this.userId}`,{
@@ -263,11 +266,11 @@ export default ({
                     document.getElementById("prenom-msg").className = "alert text-success alert-success";
                     self.errors.prenom = response.data.message;
                 })
-                .then((event) => {
-                   event.target.reset();
-                })
                 .catch(error => {console.log(error)});
-            }else{ event.preventDefault()}
+            }else{ 
+                document.getElementById("prenom-msg").className = "alert text-success alert-danger";
+                self.errors.prenom = response.data.message;
+                }
         },
         validPrenom:function(){
             const nomRE = new RegExp ("^[a-zA-ZÀ-ÿ]+(\\s?\\.?,?'?-?[a-zA-ZÀ-ÿ])+$");
@@ -282,7 +285,7 @@ export default ({
                 self.validation.prenom = true;
             }
         },
-        changeMail:function(e){
+        changeMail:function(response){
             const self = this; 
             if(self.validation.email == true){
                 axios.put(`http://localhost:3000/api/auth/user/profile/${this.userId}`,{
@@ -299,7 +302,9 @@ export default ({
                     self.errors.email = response.data.message;
                 })
                     .catch(error => {console.log(error)});
-            }else{ e.preventDefault()}
+            }else{
+                 document.getElementById("mail-msg").className = "alert  text-success alert-danger";
+                    self.errors.email = response.data.message;}
         },
         validMail:function(){
             const emailRE = new RegExp ("^[a-zA-Z0-9.-_]+[@]{1}[a-zA-Z0-9.-_]+[.]{1}[a-z]{2,10}$");
@@ -334,7 +339,7 @@ export default ({
                 .catch(error => {console.log(error)});
             }else{ e.preventDefault()}     
         },
-        changePassword:function(e){
+        changePassword:function(response){
             const self = this;
             if(self.validation.confirmPassword == true){
                 const self = this
@@ -347,7 +352,9 @@ export default ({
                     self.errors.passwordConfirm = response.data.message;
                 })
                 .catch(error => {console.log(error)});
-            }else{ e.preventDefault()}     
+            }else{ 
+                document.getElementById("passwordConfirm-msg").className = "alert  text-success alert-danger";
+                self.errors.passwordConfirm = response.data.message;}     
         },
         validPassword:function(){
             const passwordRe = new RegExp('^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$');
