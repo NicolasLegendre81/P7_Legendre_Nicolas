@@ -64,7 +64,7 @@ export default {
       validate:false,
     }},
     methods :{      
-        signup(e){
+        signup(response){
             this.validate=false;
             const emailRe = new RegExp('^[a-zA-Z0-9.-_]+[@]{1}[a-zA-Z0-9.-_]+[.]{1}[a-z]{2,10}$');
             const passwordRe = new RegExp('^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$');
@@ -111,7 +111,7 @@ export default {
                     console.log(error.response.data);
                     self.errors.push(error.response.data.message);
                 })                
-            }else{ e.preventDefault();}
+            }else{ console.log(response);}
         },
     }
 }
