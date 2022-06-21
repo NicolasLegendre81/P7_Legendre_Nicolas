@@ -6,6 +6,7 @@ const path = require ('path');
 const userRoute = require ('./routes/user');
 const postRoute = require ('./routes/posts');
 const commentsRoute = require ('./routes/comments');
+const helmet = require("helmet");
   
 const app = express();
 app.use(morgan('dev'))
@@ -23,4 +24,5 @@ app.use ('/api/posts',postRoute);
 app.use ('/api/comments',commentsRoute);
 
 app.use("/images", express.static(path.join(__dirname, "images")));
+app.use(helmet());
 module.exports = app;
